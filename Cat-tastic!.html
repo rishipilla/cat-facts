@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>🐱 Cat-tastic!</title>
+<style>
+  :root{
+    --bg1:#ffe9f0; --bg2:#fff6e0; --card:#ffffff; --text:#3a2e2e;
+    --accent:#ff8fab; --accent2:#ffb703;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg1:#241b2f; --bg2:#1b1430; --card:#2d2440; --text:#f3ecff;
+      --accent:#ff8fab; --accent2:#ffd166;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg1:#241b2f; --bg2:#1b1430; --card:#2d2440; --text:#f3ecff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100%;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:var(--text);
+    font-family:"Comic Sans MS",system-ui,sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center; padding:2rem 1rem 3rem;
+    overflow-x:hidden;
+  }
+  h1{font-size:clamp(1.8rem,6vw,3rem); margin-bottom:0;}
+  p.sub{opacity:.8; max-width:500px;}
+  .card{
+    background:var(--card); border-radius:20px; padding:2rem;
+    max-width:460px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,.15);
+    margin-top:1.5rem;
+  }
+  .cat-btn{
+    font-size:5rem; background:none; border:none; cursor:pointer;
+    transition:transform .15s;
+  }
+  .cat-btn:hover{transform:scale(1.1) rotate(-5deg);}
+  .cat-btn:active{transform:scale(.9);}
+  #fact{
+    margin-top:1rem; font-size:1.1rem; min-height:3.5em;
+  }
+  button.action{
+    margin-top:1rem; padding:.7rem 1.4rem; border:none; border-radius:999px;
+    background:var(--accent); color:white; font-weight:bold; font-size:1rem;
+    cursor:pointer; box-shadow:0 4px 12px rgba(255,143,171,.4);
+  }
+  button.action:hover{background:var(--accent2);}
+  .counter{margin-top:1rem; font-size:.9rem; opacity:.7;}
+  .float{
+    position:fixed; font-size:1.5rem; opacity:.5; pointer-events:none;
+    animation:rise linear forwards;
+  }
+  @keyframes rise{
+    from{transform:translateY(0) rotate(0deg); opacity:.6;}
+    to{transform:translateY(-100vh) rotate(360deg); opacity:0;}
+  }
+</style>
+</head>
+<body>
+  <h1>🐾 Cat-tastic! 🐾</h1>
+  <p class="sub">Click the cat for a purr-fectly random fact.</p>
+
+  <div class="card">
+    <button class="cat-btn" id="catBtn">🐱</button>
+    <div id="fact">Click the cat to begin...</div>
+    <button class="action" id="nextBtn">Another fact!</button>
+    <div class="counter" id="counter">Facts discovered: 0</div>
+  </div>
+
+<script>
+const facts = [
+  "Cats spend 70% of their lives asleep — that's up to 16 hours a day.",
+  "A group of cats is called a 'clowder'.",
+  "Cats can make over 100 different vocal sounds, while dogs only make about 10.",
+  "A cat's nose print is unique, just like a human's fingerprint.",
+  "Cats can't taste sweetness — they lack the receptor for it.",
+  "The oldest known pet cat was found in a 9,500-year-old grave on Cyprus.",
+  "Cats walk like camels and giraffes: both legs on one side move together.",
+  "A cat's purr vibrates between 25–150 Hz, a range shown to help heal bones.",
+  "Most cats have no eyelashes.",
+  "A cat's hearing is much more sensitive than a human's or even a dog's.",
+  "Cats have a third eyelid called the 'haw'.",
+  "A house cat's genome is 95.6% tiger.",
+  "Cats sweat only through their paws.",
+  "Adult cats meow mainly to communicate with humans, not other cats.",
+  "A cat can rotate its ears 180 degrees."
+];
+
+const catBtn = document.getElementById('catBtn');
+const factEl = document.getElementById('fact');
+const counterEl = document.getElementById('counter');
+let count = 0;
+let lastIndex = -1;
+
+function showFact(){
+  let i;
+  do { i = Math.floor(Math.random()*facts.length); } while (i === lastIndex && facts.length > 1);
+  lastIndex = i;
+  factEl.textContent = facts[i];
+  count++;
+  counterEl.textContent = `Facts discovered: ${count}`;
+  spawnFloaters();
+}
+
+function spawnFloaters(){
+  const emojis = ['🐾','😺','💗','✨'];
+  for(let k=0;k<4;k++){
+    const el = document.createElement('div');
+    el.className = 'float';
+    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.bottom = '-2rem';
+    el.style.animationDuration = (3+Math.random()*2)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 5500);
+  }
+}
+
+catBtn.addEventListener('click', showFact);
+document.getElementById('nextBtn').addEventListener('click', showFact);
+</script>
+</body>
+</html>
